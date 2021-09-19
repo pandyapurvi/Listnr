@@ -1,13 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styles from '../../../../css/styles.module.css';
+
 function ShowCard({ shows }) {
 	return (
 		<>
 			{console.log('shows', shows)}
-			<div>
+			<div className={styles.container}>
 				{shows && shows.map(show => (
 					<div key={show.id}>
-              <img src={show.images.squareLarge.url} alt="images" />
+              <img src={show.images.squareLarge.url} alt="images" className={styles.image} />
               <p>{show.name}</p>
               <p>{show.description}</p>
             </div>

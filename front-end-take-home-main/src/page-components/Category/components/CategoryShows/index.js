@@ -15,9 +15,9 @@ function CategoryShows({ shows, description }) {
             <Paragraph text={description} variant="l" transparent />
           </TextWrapper>
           )}
-          <ShowCard shows={shows}/>
         </StyledBox>
       </Flex>
+      <ShowCard shows={shows}/>
     </StyledCategoryShows>
   );
 }

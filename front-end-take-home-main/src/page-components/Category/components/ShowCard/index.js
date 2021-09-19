@@ -1,45 +1,84 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styles from '../../../../css/styles.module.css';
-import Header from 'shared-components/Typography/Header';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import styles from "../../../../css/styles.module.css";
+import Header from "shared-components/Typography/Header";
+import SortButton from "shared-components/SortButton";
+import { Flex } from "@rebass/grid";
 
 function ShowCard({ shows }) {
+  const [ascending, setAscending] = useState("ascending");
 
-	const podcastCount = shows && shows.length >= 1 ?
-		`${shows.length} Podcasts` :
-		`${shows.length} Podcast`;
+	const podcastCount = shows.length === 0 ? `No Podcast` : (shows.length === 1 ? `${shows.length} Podcast` : `${shows.length} Podcasts`)
+	
+  const sortedList = shows && shows.sort((a, b) => {
+    const isReversed = ascending === "ascending" ? 1 : -1;
+    return isReversed * a.name.localeCompare(b.name);
+  });
 
-	return (
-		<>
-			<Header as="h1" variant="m" text={podcastCount} linesToShow={1} mb="m" />
-			{console.log('shows', shows)}
-			<div className={styles.container}>
-				{shows && shows.map(show => (
-					<div key={show.id}>
-              <img src={show.images.squareLarge.url} alt="images" className={styles.image} />
+  const onToggleSort = (ascending) => {
+    setAscending(ascending);
+  };
+
+  return (
+    <>
+      <Flex justifyContent="space-between" alignItems="center" flexWrap="wrap">
+        <Header
+          as="h1"
+          variant="m"
+          text={podcastCount}
+          linesToShow={1}
+          mb="m"
+        />
+
+        <SortButton
+          onOptionClick={(key) => onToggleSort(key)}
+          options={[
+            {
+              key: "ascending",
+              value: "Sort A-Z",
+            },
+            {
+              key: "descending",
+              value: "Sort Z-A",
+            },
+          ]}
+        />
+      </Flex>
+
+      <div className={styles.container}>
+        {
+          sortedList.map((show) => (
+            <div key={show.id}>
+              <img
+                src={show.images.squareLarge.url}
+                alt="Listner images"
+                className={styles.image}
+              />
               <p className={styles.headerText}>{show.name}</p>
               <p className={styles.description}>{show.description}</p>
             </div>
-				))}
-			</div>
-			</>
-	)
-};
+          ))}
+      </div>
+    </>
+  );
+}
 
 ShowCard.propTypes = {
-  shows: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string,
-    description: PropTypes.string,
-    images: PropTypes.shape({
-      squareLarge: PropTypes.shape({
-        url: PropTypes.string,
+  shows: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      description: PropTypes.string,
+      images: PropTypes.shape({
+        squareLarge: PropTypes.shape({
+          url: PropTypes.string,
+        }),
       }),
-    }),
-  }))
+    })
+  ),
 };
 
 ShowCard.defaultProps = {
-  shows: []
+  shows: [],
 };
 
 export default ShowCard;

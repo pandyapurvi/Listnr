@@ -4,16 +4,24 @@ import styles from "../../../../css/styles.module.css";
 import Header from "shared-components/Typography/Header";
 import SortButton from "shared-components/SortButton";
 import { Flex } from "@rebass/grid";
+import Paragraph from "shared-components/Typography/Paragraph";
 
 function ShowCard({ shows }) {
   const [ascending, setAscending] = useState("ascending");
 
-	const podcastCount = shows.length === 0 ? `No Podcast` : (shows.length === 1 ? `${shows.length} Podcast` : `${shows.length} Podcasts`)
-	
-  const sortedList = shows && shows.sort((a, b) => {
-    const isReversed = ascending === "ascending" ? 1 : -1;
-    return isReversed * a.name.localeCompare(b.name);
-  });
+  const podcastCount =
+    shows.length === 0
+      ? `No Podcast`
+      : shows.length === 1
+      ? `${shows.length} Podcast`
+      : `${shows.length} Podcasts`;
+
+  const sortedList =
+    shows &&
+    shows.sort((a, b) => {
+      const isReversed = ascending === "ascending" ? 1 : -1;
+      return isReversed * a.name.localeCompare(b.name);
+    });
 
   const onToggleSort = (ascending) => {
     setAscending(ascending);
@@ -46,18 +54,34 @@ function ShowCard({ shows }) {
       </Flex>
 
       <div className={styles.container}>
-        {
-          sortedList.map((show) => (
-            <div key={show.id}>
-              <img
-                src={show.images.squareLarge.url}
-                alt="Listner images"
-                className={styles.image}
+        {sortedList.map((show) => (
+          <div key={show.id}>
+            <img
+              src={show.images.squareLarge.url}
+              alt="Listner images"
+              className={styles.image}
+            />
+            <Header
+              as="h3"
+              variant="s"
+              text={show.name}
+              linesToShow={1}
+              mb="m"
+            />
+
+            <div className={styles.para}>
+              <Paragraph
+                text={show.description}
+                variant="m"
+                transparent
+								linesToShow={3}
               />
-              <p className={styles.headerText}>{show.name}</p>
-              <p className={styles.description}>{show.description}</p>
             </div>
-          ))}
+            {/* I used my own to style thna later on I found Header and Paragraph from story book. So I kept here for reference */}
+            {/* <p className={styles.headerText}>{show.name}</p> */}
+            {/* <p className={styles.description}>{show.description}</p> */}
+          </div>
+        ))}
       </div>
     </>
   );
